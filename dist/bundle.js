@@ -92,7 +92,7 @@
 
 
 	// module
-	exports.push([module.id, "h1 {\n  color: green; }\n", ""]);
+	exports.push([module.id, "h1, form {\n  text-align: center; }\n\nh4 {\n  color: #ddd; }\n\na, a:hover, a:focus {\n  color: #f77; }\n\nul {\n  list-style-type: none;\n  color: white;\n  padding: 0px; }\n\nli {\n  background-color: #567;\n  padding: 10px;\n  margin-bottom: 5px; }\n\n#search-button, #random-button {\n  background-color: #d9534f;\n  border-color: #d43f3a;\n  font-size: 14px;\n  color: white; }\n", ""]);
 
 	// exports
 
@@ -422,25 +422,25 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var search = function search() {
-	  //CACHE DOM
+	  //cache DOM
 	  var el = document.getElementById('search-value');
 	  var btn = document.getElementById('search-button');
 	  var rdm = document.getElementById('random-button');
 
-	  //BINDING EVENTS
+	  //binding events
 	  btn.addEventListener('click', function (e) {
 	    e.preventDefault();
 	    searchWiki();
 	  });
 	  rdm.addEventListener('click', randomWiki);
 
-	  //EVENT HANDLERS
+	  //event handlers
 	  function randomWiki() {
 	    window.open("https://en.wikipedia.org/wiki/Special:Random");
 	  };
 	  function searchWiki() {
 	    var input = document.getElementById('search-value');
-	    (0, _ajax2.default)('GET', "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages||extracts&generator=search&piprop=thumbnail&pilimit=10&pithumbsize=200&exsentences=3&exlimit=10&exintro=1&explaintext=1&gsrlimit=10&gsrnamespace=0&gsrsearch=" + input.value, _results2.default);
+	    (0, _ajax2.default)('GET', "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages||extracts||info&generator=search&piprop=thumbnail&pilimit=10&pithumbsize=200&exsentences=3&exlimit=10&exintro=1&explaintext=1&gsrlimit=10&gsrnamespace=0&inprop=url&gsrsearch=" + input.value, _results2.default);
 	    input.value = '';
 	  }
 	};
@@ -476,23 +476,26 @@
 	'use strict';
 
 	var results = function results(data) {
-	  //CACHE DOM
+	  //cache DOM
 	  var searchResults = document.getElementById('search-results');
 	  searchResults.innerHTML = '';
 
-	  //DISPLAY RESULTS
-	  var itemList, extract, imgUrl;
-	  var resultsObj = data.query.pages;
-	  for (var item in resultsObj) {
-	    itemList = '<li>' + resultsObj[item].title + '</li>';
-	    extract = '<p>' + resultsObj[item].extract + '</p>';
-	    if (resultsObj[item].hasOwnProperty('thumbnail')) {
-	      imgUrl = '<img src="' + resultsObj[item].thumbnail.source + '">';
+	  //create elements from data
+	  var item,
+	      extract,
+	      imgUrl,
+	      itemList = '',
+	      json = data.query.pages;
+	  for (var key in json) {
+	    item = '<li class="hidden"><h4><a href="' + json[key].fullurl + '">' + json[key].title + '</a></h4>';
+	    extract = '<p>' + json[key].extract + '</p>';
+	    if (json[key].hasOwnProperty('thumbnail')) {
+	      imgUrl = '<img src="' + json[key].thumbnail.source + '">';
 	    } else {
 	      imgUrl = '';
 	    };
-
-	    searchResults.innerHTML += itemList + ' ' + extract + imgUrl;
+	    itemList = item + extract + imgUrl + '</li>';
+	    searchResults.innerHTML += itemList;
 	  };
 	};
 
