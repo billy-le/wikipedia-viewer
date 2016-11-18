@@ -1,5 +1,30 @@
-$title: green;
+h1, form {
+  text-align: center;
+}
 
-h1 {
-  color: $title;
+h4 {
+  color: #ddd;
+}
+
+a, a:hover, a:focus {
+  color: #f77;
+}
+
+ul {
+  list-style-type: none;
+  color: white;
+  padding: 0px;
+}
+
+li {
+  background-color: #567;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+#search-button, #random-button {
+  background-color: #d9534f;
+  border-color: #d43f3a;
+  font-size: 14px;
+  color: white;
 }
