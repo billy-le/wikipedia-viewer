@@ -1,22 +1,23 @@
 var results = function(data) {
-  //CACHE DOM
+  //cache DOM
   var searchResults = document.getElementById('search-results');
   searchResults.innerHTML = '';
 
-  //DISPLAY RESULTS
-  var itemList, extract, imgUrl;
-  var resultsObj = data.query.pages;
-  for (var item in resultsObj) {
-    itemList = '<li>' + resultsObj[item].title + '</li>';
-    extract = '<p>' + resultsObj[item].extract + '</p>';
-    if(resultsObj[item].hasOwnProperty('thumbnail')) {
-      imgUrl = '<img src="' + resultsObj[item].thumbnail.source + '">';
+  //create elements from data
+  var item, extract, imgUrl,
+      itemList = '',
+      json = data.query.pages;
+  for (var key in json) {
+    item = '<li class="hidden"><h4><a href="' + json[key].fullurl + '">' + json[key].title + '</a></h4>';
+    extract = '<p>' + json[key].extract + '</p>';
+    if(json[key].hasOwnProperty('thumbnail')) {
+      imgUrl = '<img src="' + json[key].thumbnail.source + '">';
     }
     else {
       imgUrl = '';
     };
-
-    searchResults.innerHTML += itemList + ' ' + extract + imgUrl;
+    itemList = item + extract + imgUrl + '</li>';
+    searchResults.innerHTML += itemList;
   };
 }
 
